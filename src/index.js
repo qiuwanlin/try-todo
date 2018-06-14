@@ -4,6 +4,6 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 ReactDOM.render(
-    <h1>Hi, world!</h1>,
+   <App />,
     document.getElementById('root2')
   );
