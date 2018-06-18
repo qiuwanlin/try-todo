@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://qiuwanlin.github.io/try-todo/build",
   "dependencies": {
+    "leancloud-storage": "^3.7.3",
     "normalize.css": "^8.0.0",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
