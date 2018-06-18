@@ -1,25 +1,18 @@
 import React, { Component } from 'react';
+import AV, { User } from "leancloud-storage"
 import 'normalize.css'
 import './reset.css'
 import './App.css';
 import TodoInput from './TodoInput'
 import TodoItem from './TodoItem'
-import * as localStore from './localStore'
-
-import AV from 'leancloud-storage'
-var APP_ID = 'fyAhyhymvWheq5sU7Rv89jkh-gzGzoHsz';
-var APP_KEY = 'UNWR0WHu1Y4TCWorhTl1FqgL';
-AV.init({
-  appId: APP_ID,
-  appKey: APP_KEY
-})
+import UserDialog from "./UserDialog"
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
       newTodo: '',
-      todoList: localStore.load('todoList') || []
+      todoList: []
     }
   }
   render() {
@@ -45,11 +38,11 @@ class App extends Component {
         <ol className="todoList">
           {todos}
         </ol>
+        <UserDialog/>
       </div>
     )
   }
   componentDidUpdate() {
-    localStore.save('todoList', this.state.todoList)
   }
   toggle(e, todo) {
     todo.status = todo.status === 'completed' ? '' : 'completed'
