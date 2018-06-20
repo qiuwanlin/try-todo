@@ -6,7 +6,8 @@ import './App.css';
 import TodoInput from './TodoInput'
 import TodoItem from './TodoItem'
 import UserDialog from "./UserDialog"
-import { getCurrentUser, signOut } from './leanCloud'
+import {getCurrentUser, signOut, TodoModel} from './leanCloud'
+
 
 class App extends Component {
   constructor(props) {
@@ -15,6 +16,14 @@ class App extends Component {
       user: getCurrentUser() || {},
       newTodo: '',
       todoList: []
+    }
+    let user = getCurrentUser()
+    if (user) {
+      TodoModel.getByUser(user, (todos) => {
+        let stateCopy = JSON.parse(JSON.stringify(this.state))
+        stateCopy.todoList = todos
+        this.setState(stateCopy)
+      })
     }
   }
   render() {
@@ -35,7 +44,7 @@ class App extends Component {
          {this.state.user.id ? <button onClick={this.signOut.bind(this)}>登出</button> : null}
         </h1>
         <div className="inputWrapper">
-          <TodoInput content={this.state.newTodo}
+        <TodoInput content={this.state.newTodo}
             onChange={this.changeTitle.bind(this)}
             onSubmit={this.addTodo.bind(this)} />
         </div>
@@ -76,15 +85,20 @@ class App extends Component {
 
 
   addTodo(event) {
-    this.state.todoList.push({
-      id: idMaker(),
+    let newTodo = {
       title: event.target.value,
       status: '',
       deleted: false
-    })
-    this.setState({
-      newTodo: '',
-      todoList: this.state.todoList
+    }
+        TodoModel.create(newTodo, (id) => {
+          newTodo.id = id
+          this.state.todoList.push(newTodo)
+          this.setState({
+           newTodo: '',
+            todoList: this.state.todoList
+          })
+        }, (error) => {
+          console.log(error)
     })
   }
   delete(event, todo) {
@@ -95,12 +109,7 @@ class App extends Component {
 
 export default App;
 
-let id = 0
 
-function idMaker() {
-  id += 1
-  return id
-}
 
 
 
