@@ -3,8 +3,8 @@ import './UserDialog.css'
 import { signUp, signIn, sendPasswordResetEmail } from './leanCloud'
 import ForgotPasswordForm from './ForgotPasswordForm'
 import SignInOrSignUp from './SignInOrSignUp'
-export default class UserDialog extends Component {
-  constructor(props) {
+export default class UserDialog extends Component{
+  constructor(props){
     super(props)
     this.state = {
       selectedTab: 'signInOrSignUp', // 'forgotPassword'
@@ -15,23 +15,16 @@ export default class UserDialog extends Component {
       }
     }
   }
-
-  signUp(e) {
+  signUp(e){
     e.preventDefault()
-    let { email, username, password } = this.state.formData
-    let success = (user) => {
+    let {email, username, password} = this.state.formData
+    let success = (user)=>{
       this.props.onSignUp.call(null, user)
     }
-    let error = (error) => {
-      switch (error.code) {
-        case 125:
-          alert('邮箱格式不正确')
-          break
+    let error = (error)=>{
+      switch(error.code){
         case 202:
           alert('用户名已被占用')
-          break
-        case 203:
-          alert('该邮箱地址已被占用')
           break
         default:
           alert(error)
@@ -40,14 +33,15 @@ export default class UserDialog extends Component {
     }
     signUp(email, username, password, success, error)
   }
-  signIn(e) {
+  signIn(e){
     e.preventDefault()
-    let { username, password } = this.state.formData
-    let success = (user) => {
+    let {username, password} = this.state.formData
+    let success = (user)=>{
       this.props.onSignIn.call(null, user)
+      this.props.todoInit.call(null)
     }
-    let error = (error) => {
-      switch (error.code) {
+    let error = (error)=>{
+      switch(error.code){
         case 210:
           alert('用户名与密码不匹配')
           break
@@ -58,13 +52,12 @@ export default class UserDialog extends Component {
     }
     signIn(username, password, success, error)
   }
-  changeFormData(key, e) {
+  changeFormData(key, e){
     let stateCopy = JSON.parse(JSON.stringify(this.state))  // 用 JSON 深拷贝
     stateCopy.formData[key] = e.target.value
     this.setState(stateCopy)
   }
-  render() {
-
+  render(){
     return (
       <div className="UserDialog-Wrapper">
         <div className="UserDialog">
@@ -77,30 +70,29 @@ export default class UserDialog extends Component {
                 onChange={this.changeFormData.bind(this)}
                 onForgotPassword={this.showForgotPassword.bind(this)}
               /> :
-              <ForgotPasswordForm
-                formData={this.state.formData}
-                onSubmit={this.resetPassword.bind(this)}
-                onChange={this.changeFormData.bind(this)}
-                onSignIn={this.returnToSignIn.bind(this)}
-              />
+            <ForgotPasswordForm
+              formData={this.state.formData}
+              onSubmit={this.resetPassword.bind(this)}
+              onChange={this.changeFormData.bind(this)}
+              onSignIn={this.returnToSignIn.bind(this)}
+            />
           }
         </div>
       </div>
     )
   }
-  showForgotPassword() {
+  showForgotPassword(){
     let stateCopy = JSON.parse(JSON.stringify(this.state))
     stateCopy.selectedTab = 'forgotPassword'
     this.setState(stateCopy)
   }
-  returnToSignIn() {
+  returnToSignIn(){
     let stateCopy = JSON.parse(JSON.stringify(this.state))
     stateCopy.selectedTab = 'signInOrSignUp'
     this.setState(stateCopy)
   }
-  resetPassword(e) {
+  resetPassword(e){
     e.preventDefault()
-    sendPasswordResetEmail(this.state.formData.email)
-
+    sendPasswordResetEmail(this.state.formData.email)    
   }
 }

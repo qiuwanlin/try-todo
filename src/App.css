@@ -8,6 +8,7 @@
   min-height: 20em;
   min-width: 32em;
   box-shadow: 0 0 1em hsla(0,0%,0%,0.15);
+  position: relative;
 }
 
 .App > .todoList> li:nth-child(odd){
@@ -15,4 +16,18 @@
   }
   .App > .todoList> li:nth-child(even){
     background: transparent;
+  }
+.App > h1{font-size: 1.5em;
+  margin: 1em 2em 1em;
+  color: rgb(255, 196, 169);}
+.App > h1 > button{background-color: rgb(255, 194, 175);
+  border: none;
+  border-radius: 20%;
+  color: white;
+  padding: 5px 8px;
+  display: inline-block;
+  position: absolute;
+right:1em;bottom:1em;
+  font-size: 14px;
+  
   }
